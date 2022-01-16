@@ -3,7 +3,7 @@ from distutils.log import error
 import sys
 import numpy as np
 
-def winfuns(**args):
+def winfuns(*args):
     nargin = len(args)
 
     if nargin < 2:
@@ -21,8 +21,8 @@ def winfuns(**args):
             error('Output length L must be larger than or equal to N')
             sys.exit(1)
         if N%2 == 0: # For even N the sampling interval is [-0.5, 0.5-1/N]
-            x1 = np.linspace(0, 0.5-1/N, int(0.5-1/N)*N+1)
-            x1 = x1.reshape(1, x.shape[0])
+            x1 = np.linspace(0, 0.5-1/N, int((0.5-1/N)*N)+1)
+            x1 = x1.reshape(1, x1.shape[0])
 
             if L > N:
                 x2 = -N * np.ones((1, L-N))

@@ -21,7 +21,7 @@ def Deltas(x, hlen):
 
     return D
 
-def cqcc(**args):
+def cqcc(*args):
     nargin = len(args)
 
     if nargin < 2:
@@ -54,11 +54,11 @@ def cqcc(**args):
     # Log Power Spectrum
     absCQT = np.abs(Xcq['c'])
     
-    TimeVec = np.arange(1, absCQT.shape[1]+1).reshape(1, -1)
-    TimeVec *= Xcq['xlen'] / absCQT.shape[1] / fs
+    # TimeVec = np.arange(1, absCQT.shape[1]+1).reshape(1, -1)
+    # TimeVec = TimeVec*Xcq['xlen'] / absCQT.shape[1] / fs
 
-    FreqVec = np.arange(0, absCQT.shape[0]).reshape(1, -1)
-    FreqVec = fmin * 2 ** (FreqVec / B)
+    # FreqVec = np.arange(0, absCQT.shape[0]).reshape(1, -1)
+    # FreqVec = fmin * 2 ** (FreqVec / B)
 
     eps = 2.2204e-16
     LogP_absCQT = np.log(absCQT ** 2 + eps)
@@ -68,7 +68,7 @@ def cqcc(**args):
     Ures_LogP_absCQT = librosa.resample(
         LogP_absCQT.T,
         fs,
-        9.562
+        9_562
     ).T
     Ures_FreqVec = None
 
@@ -111,4 +111,4 @@ def cqcc(**args):
             Deltas(Deltas(CQcepstrum_temp, f_d), f_d)
         ], axis=0)
     
-    return CQcc
+    return CQcc.T

@@ -3,7 +3,7 @@ import numpy as np
 from CQT_Toolbox.cell2mat import cell2mat
 
 def cqtCell2Sparse(c, M):
-    bins = M.shape[0]/2 - 1
+    bins = M.shape[0]//2 - 1
     spLen = M[bins]
     cSparse = np.zeros((bins, spLen))
 
