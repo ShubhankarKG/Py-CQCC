@@ -6,7 +6,7 @@ import numpy as np
 
 from CQT_Toolbox.nsgtf_real import nsgtf_real
 
-def cqt(**args):
+def cqt(*args):
     rasterize = 'full'
     phasemode = 'global'
     outputFormat = 'sparse'
@@ -33,12 +33,12 @@ def cqt(**args):
                 gamma = varargin[i + 1]
     
     # Window design
-    g, shift, M = nsgcqwin(fmin, fmax, B, fs, len(x), 'winFun', windowFct, 'gamma', gamma, 'fractional', 0)
+    g, shift, M = nsgcqwin(fmin, fmax, B, fs, len(x), 'winfun', windowFct, 'gamma', gamma, 'fractional', 0)
     fbas = np.cumsum(shift[1:]) / len(x)
-    fbas = fbas[0:M.shape[0]/2 - 1]
+    fbas = fbas[0:M.shape[0]//2 - 1]
 
     # Compute coefficients
-    bins = M.shape[0]/2 - 1
+    bins = M.shape[0]//2 - 1
     if rasterize == 'full':
         M[1:bins+1] = M[bins+1]
         M[bins+2:] = M[bins:0:-1]

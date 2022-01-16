@@ -1,4 +1,3 @@
-from curses.ascii import isalpha
 from distutils.log import error
 from math import ceil, floor, log2
 import sys
@@ -6,7 +5,7 @@ import numpy as np
 
 from CQT_Toolbox.winfuns import winfuns
 
-def nsgcqwin(**args):
+def nsgcqwin(*args):
     fmin, fmax, bins, sr, Ls = args[:5]
 
     bwfac = 1
@@ -15,7 +14,7 @@ def nsgcqwin(**args):
     winfun = 'hann'
     gamma = 0
 
-    nargin = len(**args)
+    nargin = len(args)
 
     if nargin < 5:
         error('Not enough input arguments')
@@ -28,7 +27,7 @@ def nsgcqwin(**args):
             error("Invalid input argument")
             sys.exit(1)
         for i in range(0, Lvar, 2):
-            if not isalpha(varargin[i]):
+            if not isinstance(varargin[i], str):
                 error("Invalid input argument")
                 sys.exit(1)
             if varargin[i] == 'min_win':
@@ -98,7 +97,7 @@ def nsgcqwin(**args):
         corr_shift = fbas - posit
         M = ceil(bw+1)
     else :
-        bw = round(bw)
+        bw = np.round(bw)
         M = bw
     
     for i in range(2*(Lfbas+1)):
@@ -114,15 +113,14 @@ def nsgcqwin(**args):
         for i in range(len(bw)):
             g[i] = winfuns(winfun, bw[i])
         
-    M = bwfac * ceil(M/bwfac)
+    M = bwfac * np.ceil(M/bwfac)
 
     # Setup turnkey window for 0- and Nyquist-frequency
     for i in range(Lfbas+2):
         if M[i] > M[i+1]:
-            g[i] = np.ones((M[i], 1))
-            begin = floor(M[i]/2)-floor(M[i+1]/2)+1
-            end = floor(M[i]/2)+ceil(M[i+1]/2)
-            g[i][begin:end] = winfuns('hann', M[i+1])
+            start = int((np.floor(M[i]/2)-np.floor(M[i+1]/2)+1))
+            end = int((np.floor(M[i]/2)+np.ceil(M[i+1]/2)))
+            g[i][start-1:end] = winfuns('hann', M[i+1])
             g[i] = g[i] / np.sqrt(M[i])
     
-    return g
+    return g, shift, M
