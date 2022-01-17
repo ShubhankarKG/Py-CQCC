@@ -37,8 +37,8 @@ print(cqcc)
 
 ## Future Scope
 
-- [] Simplify API for functions.
-- [] Write some tests.
+- [ ] Simplify API for functions.
+- [ ] Write some tests.
 
 
 ## References
