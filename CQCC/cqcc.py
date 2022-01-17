@@ -1,32 +1,81 @@
-from distutils.log import error
+"""Main functions for generating CQCC"""
+
 from math import ceil, log2
-import sys
 import numpy as np
-from CQT_Toolbox.cqt import cqt
 import librosa
 import scipy
+from CQCC.delta import Deltas
 
-def Deltas(x, hlen):
-    win = list(range(hlen, -hlen-1, -1))
-    
-    xx_1 = np.tile(x[:,0],(1,hlen)).reshape(hlen,-1).T
-    xx_2 = np.tile(x[:,-1],(1,hlen)).reshape(hlen,-1).T
-    
-    xx = np.concatenate([xx_1, x, xx_2], axis=-1)
-    
-    D = scipy.signal.lfilter(win, 1, xx)
-
-    D = D[:,hlen*2:]
-    D = D /(2*sum(np.arange(1,hlen+1))**2)
-
-    return D
+from CQT_Toolbox.cqt import cqt
 
 def cqcc(*args):
+    """Constant Q cepstral coefficients (CQCC)
+
+    Returns the CQCC of an audio signal
+
+    Parameters
+    ----------
+
+    x : ndarray
+        input signal
+    fs : int
+        sampling rate of the signal
+    B : int
+        number of bins per octave [default = 96]
+    fmax : int
+        highest frequency to be analyzed [default = Nyquist frequency]
+    fmin : int
+        lowest frequency to be analyzed [default = ~20Hz to fullfill an integer number of octave]
+    d : int
+        number of uniform samples in the first octave [default 16]
+    cf : int
+        number of cepstral coefficients excluding 0'th coefficient [default 19]
+    ZsdD : str
+        any sensible combination of the following  [default ZsdD]:
+        'Z' : include 0'th order cepstral coefficient
+        's' : include static coefficients (c)
+        'd' : include delta coefficients (dc/dt)
+        'D' : include delta-delta coefficients (d^2c/dt^2)
+    
+
+    Returns
+    -------
+
+    CQCC : ndarray
+        constant Q cepstral coefficients (nCoeff x nFea)
+
+
+    See Also
+    --------
+
+    CQCC_Toolbox.cqt : CQT
+
+    References
+    ----------
+
+    .. [1] M. Todisco, H. Delgado, and N. Evans. A New Feature for 
+       Automatic Speaker Verification Anti-Spoofing: Constant Q 
+       Cepstral Coefficients. Proceedings of ODYSSEY - The Speaker 
+       and Language Recognition Workshop, 2016.
+    
+    .. [2] C. Sch�rkhuber, A. Klapuri, N. Holighaus, and M. D�fler. 
+       A Matlab Toolbox for Efficient Perfect Reconstruction log-f Time-Frequecy
+       Transforms. Proceedings AES 53rd Conference on Semantic Audio, London,
+       UK, Jan. 2014. http://www.cs.tut.fi/sgn/arg/CQT/
+
+    .. [3] G. A. Velasco, N. Holighaus, M. D�fler, and T. Grill. Constructing an
+       invertible constant-Q transform with non-stationary Gabor frames.
+       Proceedings of DAFX11, Paris, 2011.
+
+    .. [4] N. Holighaus, M. D�fler, G. Velasco, and T. Grill. A framework for
+       invertible, real-time constant-q transforms. Audio, Speech, and
+       Language Processing, IEEE Transactions on, 21(4):775-785, April 2013.
+
+    """
     nargin = len(args)
 
     if nargin < 2:
-        error("Not enough arguments")
-        sys.exit(1)
+        raise ValueError('Not enough input arguments')
     
     x, fs = args[0], args[1]
 

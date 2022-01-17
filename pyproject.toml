@@ -4,3 +4,12 @@ requires = [
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.2"
+version_files = [
+    "pyproject.toml:version",
+    "__init__.py",
+    "setup.py:version"
+]
