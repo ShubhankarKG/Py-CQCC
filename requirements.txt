@@ -61,7 +61,6 @@ pre-commit==2.16.0
 prompt-toolkit==3.0.24
 ptyprocess==0.7.0
 pure-eval==0.2.1
-Py-CQCC==0.0.5
 pycparser==2.21
 Pygments==2.11.2
 pyparsing==3.0.6
