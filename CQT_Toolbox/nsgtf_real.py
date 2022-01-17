@@ -1,14 +1,11 @@
-from distutils.log import error
 from numpy import ceil, floor
-import sys
 import numpy as np
 
 def nsgtf_real(*args):
     nargin = len(args)
 
     if nargin <= 2:
-        error("Not enough input arguments")
-        sys.exit(1)
+        raise ValueError('Not enough input arguments')
     
     f, g, shift = args[0], args[1], args[2]
     Ls, CH = f.shape
@@ -24,8 +21,7 @@ def nsgtf_real(*args):
         if reply in ['N', 'n', 'No', 'no', '']:
             reply2 = input('Transpose signal matrix? ([Y]es, [N]o) ')
             if reply2 in ['N', 'n', 'No', 'no', '']:
-                error("Invalid signal input, terminating program")
-                sys.exit(1)
+                raise ValueError('Invalid signal input, terminating program')
             elif reply2 in ['Y', 'y', 'Yes', 'yes']:
                 print("Transposing signal matrix and continuing program exexution")
                 f = f.T
@@ -33,8 +29,7 @@ def nsgtf_real(*args):
         elif reply in ['Y', 'y', 'Yes', 'yes']:
             print("Continuing program execution")
         else:
-            error("Invalid input, terminating program")
-            sys.exit(1)
+            raise ValueError('Invalid input, terminating program')
         
     N = len(shift)
     M = args[3]

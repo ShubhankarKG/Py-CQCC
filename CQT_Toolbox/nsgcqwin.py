@@ -1,6 +1,4 @@
-from distutils.log import error
 from math import ceil, floor, log2
-import sys
 import numpy as np
 
 from CQT_Toolbox.winfuns import winfuns
@@ -17,19 +15,16 @@ def nsgcqwin(*args):
     nargin = len(args)
 
     if nargin < 5:
-        error('Not enough input arguments')
-        sys.exit(1)
+        raise ValueError('Not enough input arguments')
     
     if nargin >= 6:
         varargin = args[5:]
         Lvar = len(varargin)
         if Lvar % 2:
-            error("Invalid input argument")
-            sys.exit(1)
+            raise ValueError('Invalid input arguments')
         for i in range(0, Lvar, 2):
             if not isinstance(varargin[i], str):
-                error("Invalid input argument")
-                sys.exit(1)
+                raise ValueError('Invalid input arguments')
             if varargin[i] == 'min_win':
                 min_win = varargin[i+1]
             elif varargin[i] == 'gamma':
@@ -41,8 +36,7 @@ def nsgcqwin(*args):
             elif varargin[i] == 'winfun':
                 winfun = varargin[i+1]
             else:
-                error(f"Invalid input argument {varargin[i]}")
-                sys.exit(1)
+                raise ValueError('Invalid input arguments ' + varargin[i])
     
 
     nf = sr//2

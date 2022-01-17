@@ -1,6 +1,4 @@
-from distutils.log import error
 from math import ceil, log2
-import sys
 import numpy as np
 from CQT_Toolbox.cqt import cqt
 import librosa
@@ -25,8 +23,7 @@ def cqcc(*args):
     nargin = len(args)
 
     if nargin < 2:
-        error("Not enough arguments")
-        sys.exit(1)
+        raise ValueError('Not enough input arguments')
     
     x, fs = args[0], args[1]
 

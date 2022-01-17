@@ -1,14 +1,11 @@
 from numpy import cos, pi
-from distutils.log import error
-import sys
 import numpy as np
 
 def winfuns(*args):
     nargin = len(args)
 
     if nargin < 2:
-        error('Not enough input arguments')
-        sys.exit(1)
+        raise ValueError('Not enough input arguments')
 
     name = args[0]
     x = args[1]
@@ -18,8 +15,7 @@ def winfuns(*args):
         if nargin < 3:
             L = N
         if L < N:
-            error('Output length L must be larger than or equal to N')
-            sys.exit(1)
+            raise ValueError(f'Output length {L} must be larger than or equal to {N}')
         if N%2 == 0: # For even N the sampling interval is [-0.5, 0.5-1/N]
             x1 = np.linspace(0, 0.5-1/N, int((0.5-1/N)*N)+1)
             x1 = x1.reshape(1, x1.shape[0])
