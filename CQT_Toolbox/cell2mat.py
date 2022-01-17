@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def cell2mat(c):
     c = np.stack(c)
     if c.ndim == 3:
